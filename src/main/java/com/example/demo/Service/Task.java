@@ -3,14 +3,8 @@ package com.example.demo.Service;
 
 import com.example.demo.avaluableEntity.JsonData;
 import com.example.demo.avaluableEntity.TodayJsonData;
-import com.example.demo.dao.DataDao;
-import com.example.demo.dao.HoursAnaDao;
-import com.example.demo.dao.HoursDataDao;
-import com.example.demo.dao.TodayDataDao;
-import com.example.demo.entity.Data;
-import com.example.demo.entity.HoursAna;
-import com.example.demo.entity.HoursData;
-import com.example.demo.entity.TodayData;
+import com.example.demo.dao.*;
+import com.example.demo.entity.*;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +33,10 @@ public class Task {
     HoursAnaDao hoursAnaDao;
     @Autowired
     HoursDataDao hoursDataDao;
+    @Autowired
+    YearDataDao yearDataDao;
+    @Autowired
+    HoursData1Dao hoursData1Dao;
 
     @Scheduled(cron = "0 57 23 ? * *")
 //@Scheduled(cron = "0/40 * *  * * ? ")
@@ -88,6 +86,29 @@ public class Task {
             out_sum+=data1.getOut_dat();
         }
         hoursDataDao.save(new HoursData(date1,in_sum,out_sum));
+
+        SimpleDateFormat month=new SimpleDateFormat("yyyy-month");
+        String date4=month.format(new Date());
+        List<HoursData> list=hoursDataDao.selectBymonth(date4);
+        Integer in_data=0;
+        Integer out_data=0;
+        for(HoursData hoursData:list){
+            in_data+=hoursData.getIn_dat();
+            out_data+=hoursData.getOut_dat();
+        }
+        yearDataDao.save(new YearData(date4,in_data>out_data?in_data:out_data));
+
+        for(int i=1;i<25;i++){
+            String time=date+" "+i+":00:00";
+            String time2=date+" "+(i-1)+":00:00";
+            List<Data> data1=dataDao.selectByDate(time2,time);
+            Integer integer=0;
+            for(Data data2:data1){
+                integer+=(data2.getIn_dat()>data2.getOut_dat()?data2.getIn_dat():data2.getOut_dat());
+            }
+            HoursData1 hoursData1=new HoursData1(time,integer);
+            hoursData1Dao.save(hoursData1);
+        }
 
     }
 
@@ -146,15 +167,15 @@ public class Task {
                 hoursAnaDao.save(new HoursAna(i,0,0,0));
             }
         }
-        Integer last=0;
-        Integer in_sum=0;
-        Integer out_sum=0;
-        List<HoursAna> hoursAnas=hoursAnaDao.findAll();
+        Integer l=0;
+        Integer in=0;
+        Integer out=0;
+        List<HoursAna> hoursAnas=hoursAnaDao.findAll24();
         for(HoursAna hoursAna:hoursAnas){
-            last+=hoursAna.getLast();
-            in_sum+=hoursAna.getIn_dat();
-            out_sum+=hoursAna.getOut_dat();
+            l+=hoursAna.getLast();
+            in+=hoursAna.getIn_dat();
+            out+=hoursAna.getOut_dat();
         }
-        hoursAnaDao.save(new HoursAna(25,in_sum,out_sum,last));
+        hoursAnaDao.save(new HoursAna(25,in,out,l));
     }
 }

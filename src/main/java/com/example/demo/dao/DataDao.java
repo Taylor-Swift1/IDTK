@@ -12,4 +12,5 @@ public interface DataDao extends JpaRepository<Data,Integer>{
 
     @Query("select p from Data p where p.dt_data>?1 and p.dt_data<?2")
     List<Data> selectByDate(String date1,String date2);
+
 }

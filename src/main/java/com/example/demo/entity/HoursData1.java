@@ -10,13 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "month_data")
+@Table(name = "hours_data1")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HoursData {
+public class HoursData1 {
     @Id
     private String date;
-    private Integer in_dat;
-    private Integer out_dat;
+    private Integer data;
 }
