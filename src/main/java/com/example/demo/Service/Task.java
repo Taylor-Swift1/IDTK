@@ -39,7 +39,6 @@ public class Task {
     HoursData1Dao hoursData1Dao;
 
     @Scheduled(cron = "0 57 23 ? * *")
-//@Scheduled(cron = "0/40 * *  * * ? ")
     public void scheduled() {
         URL url1 = null;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");

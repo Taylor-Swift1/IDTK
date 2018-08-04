@@ -1,10 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.dao.DataDao;
-import com.example.demo.dao.HoursData1Dao;
-import com.example.demo.dao.HoursDataDao;
-import com.example.demo.dao.YearDataDao;
-import com.example.demo.entity.Data;
+import com.example.demo.dao.*;
+import com.example.demo.entity.HoursAna;
 import com.example.demo.entity.HoursData;
 import com.example.demo.entity.YearData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +26,8 @@ public class ApiController {
     DataDao dataDao;
     @Autowired
     HoursData1Dao hoursData1Dao;
+    @Autowired
+    HoursAnaDao hoursAnaDao;
 
     @GetMapping("/month")
     public Map month(@RequestParam Integer year , @RequestParam Integer month){
@@ -73,10 +70,14 @@ public class ApiController {
 
     @GetMapping("/day")
     public List<Integer> day(@RequestParam Integer year,@RequestParam Integer month,@RequestParam Integer day,@RequestParam Integer time1,@RequestParam Integer time2){
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-DD hh");
         String date1=year+"-"+month+"-"+day+" "+time1+":00:00";
         String date2=year+"-"+month+"-"+day+" "+time2+":00:00";
         List<Integer> list1=hoursData1Dao.findDataByDate(date1,date2);
         return list1;
+    }
+
+    @GetMapping("/today")
+    public List<HoursAna> today(){
+        return hoursAnaDao.findAll24();
     }
 }
