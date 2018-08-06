@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dao.*;
 import com.example.demo.entity.HoursAna;
 import com.example.demo.entity.HoursData;
+import com.example.demo.entity.HoursData1;
 import com.example.demo.entity.YearData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,15 +65,15 @@ public class ApiController {
     }
 
     @GetMapping("/year")
-    public List<YearData> year(@RequestParam Integer year){
+    public List<YearData> year(@RequestParam String year){
         return yearDataDao.selectByYear(year);
     }
 
     @GetMapping("/day")
-    public List<Integer> day(@RequestParam Integer year,@RequestParam Integer month,@RequestParam Integer day,@RequestParam Integer time1,@RequestParam Integer time2){
+    public List<HoursData1> day(@RequestParam Integer year,@RequestParam Integer month,@RequestParam Integer day,@RequestParam Integer time1,@RequestParam Integer time2){
         String date1=year+"-"+month+"-"+day+" "+time1+":00:00";
         String date2=year+"-"+month+"-"+day+" "+time2+":00:00";
-        List<Integer> list1=hoursData1Dao.findDataByDate(date1,date2);
+        List<HoursData1> list1=hoursData1Dao.findDataByDate(date1,date2);
         return list1;
     }
 

@@ -39,6 +39,7 @@ public class Task {
     HoursData1Dao hoursData1Dao;
 
     @Scheduled(cron = "0 57 23 ? * *")
+//@Scheduled(cron = "0/20 * *  * * ? ")
     public void scheduled() {
         URL url1 = null;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -86,7 +87,7 @@ public class Task {
         }
         hoursDataDao.save(new HoursData(date1,in_sum,out_sum));
 
-        SimpleDateFormat month=new SimpleDateFormat("yyyy-month");
+        SimpleDateFormat month=new SimpleDateFormat("yyyy-MM");
         String date4=month.format(new Date());
         List<HoursData> list=hoursDataDao.selectBymonth(date4);
         Integer in_data=0;
@@ -94,18 +95,23 @@ public class Task {
         for(HoursData hoursData:list){
             in_data+=hoursData.getIn_dat();
             out_data+=hoursData.getOut_dat();
+            System.out.println(in_data);
+            System.out.println(out_data);
         }
+        date4+="-01";
         yearDataDao.save(new YearData(date4,in_data>out_data?in_data:out_data));
 
         for(int i=1;i<25;i++){
-            String time=date+" "+i+":00:00";
+            String time=date+" "+(i%24)+":00:00";
             String time2=date+" "+(i-1)+":00:00";
             List<Data> data1=dataDao.selectByDate(time2,time);
-            Integer integer=0;
+            Integer in_dat=0;
+            Integer out_dat=0;
             for(Data data2:data1){
-                integer+=(data2.getIn_dat()>data2.getOut_dat()?data2.getIn_dat():data2.getOut_dat());
+                in_dat+=data2.getIn_dat();
+                out_dat+=data2.getOut_dat();
             }
-            HoursData1 hoursData1=new HoursData1(time,integer);
+            HoursData1 hoursData1=new HoursData1(time,in_dat,out_dat);
             hoursData1Dao.save(hoursData1);
         }
 

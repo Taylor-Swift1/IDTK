@@ -17,5 +17,6 @@ import javax.persistence.Table;
 public class HoursData1 {
     @Id
     private String date;
-    private Integer data;
+    private Integer in_dat;
+    private Integer out_dat;
 }

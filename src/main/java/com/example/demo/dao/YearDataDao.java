@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface YearDataDao extends JpaRepository<YearData,Integer> {
     @Query("select p from YearData p where date_format(p.month,'%Y')=?1")
-    List<YearData> selectByYear(Integer year);
+    List<YearData> selectByYear(String year);
 }

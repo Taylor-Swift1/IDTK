@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface HoursData1Dao extends JpaRepository<HoursData1,String> {
-    @Query("select p.data from HoursData1 p where p.date>?1 and p.date <= ?2")
-    List<Integer> findDataByDate(String date1,String date2);
+    @Query("select p from HoursData1 p where p.date>?1 and p.date <= ?2")
+    List<HoursData1> findDataByDate(String date1,String date2);
 }
