@@ -47,10 +47,12 @@ public class ApiController {
         int i=0;
         for(HoursData hoursData:list){
             i++;
-            if(i<=10){
+            String dateT=hoursData.getDate();
+            String[] dateP=dateT.split("-");
+            if(dateP[2].compareTo("10")<=0){
                 first.add(hoursData);
             }
-            else if(i<=20){
+            else if(dateP[2].compareTo("20")<=0){
                 second.add(hoursData);
             }
             else {
